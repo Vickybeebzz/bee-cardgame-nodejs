@@ -33,17 +33,14 @@ let matrix = {
 };
 
 class Game {
-  constructor() {
+  constructor(options) {
     this.flipEnabled = true;
     this.started = false;
     this.timeout = 0;
     this.previousCard = null;
     this.score = 0;
     this.flips = 0;
-    this.deck = new Deck(
-      ["🐱", "🐼", "🐍", "🐝", "🐟", "🐸", "🦇", "🐁"],
-      "⬜"
-    );
+    this.deck = new Deck(options.frontImages, options.backImage);
   }
 
   onStart() {}
@@ -66,10 +63,7 @@ class Game {
     this.score = 0;
     this.flips = 0;
     this.started = false;
-    this.deck = new Deck(
-      ["🐱", "🐼", "🐍", "🐝", "🐟", "🐸", "🦇", "🐁"],
-      "⬜"
-    );
+    this.deck = new Deck(options.frontImages, options.backImage);
     this.start();
   }
 
@@ -100,8 +94,6 @@ class Game {
   unflipCards(card, previousCard) {
     card.flipped = false;
     previousCard.flipped = false;
-    this.onFlip(card);
-    this.onFlip(previousCard);
   }
 
   updateScore() {
@@ -117,7 +109,7 @@ class Game {
       }
       this.flipEnabled = true;
     } else {
-      setTimeout(() => this.unflipCards(card, previousCard), 1000);
+      setTimeout(() => this.unflipCards(card, previousCard), 100);
       this.previousCard = null;
       setTimeout(() => (this.flipEnabled = true), 1000);
     }
@@ -135,7 +127,7 @@ class Card {
 
   getCurrentImage() {
     if (this.flipped == false) return this.backImage;
-    else return this.frontImage;
+    return this.frontImage;
   }
 }
 
@@ -170,7 +162,10 @@ function buildMatrix(deck) {
   matrix.D[4] = deck.cards[15];
 }
 
-let game = new Game();
+let game = new Game({
+  frontImages: ["🐱", "🐼", "🐍", "🐝", "🐟", "🐸", "🦇", "🐁"],
+  backImage: "⬜",
+});
 
 game.onStart = () => {
   console.log("   1  2  3  4");
@@ -189,8 +184,12 @@ game.onStart = () => {
 
   rl.question("Enter tile (e.g A 2): ", function (tile) {
     let splitString = tile.split(" ");
-    let id = matrix[splitString[0]][splitString[1]].id;
-    game.flip(id);
+    if (tile === "") {
+      game.updateScore();
+    } else {
+      let id = matrix[splitString[0]][splitString[1]].id;
+      game.flip(id);
+    }
   });
 };
 
@@ -216,8 +215,12 @@ game.onScoreUpdate = () => {
   } else {
     rl.question("Enter tile (e.g A 2): ", function (tile) {
       let splitString = tile.split(" ");
-      let id = matrix[splitString[0]][splitString[1]].id;
-      game.flip(id);
+      if (tile === "") {
+        game.updateScore();
+      } else {
+        let id = matrix[splitString[0]][splitString[1]].id;
+        game.flip(id);
+      }
     });
   }
 };
