@@ -34,6 +34,7 @@ let matrix = {
 
 class Game {
   constructor(options) {
+    this.options = options;
     this.flipEnabled = true;
     this.started = false;
     this.timeout = 0;
@@ -63,7 +64,7 @@ class Game {
     this.score = 0;
     this.flips = 0;
     this.started = false;
-    this.deck = new Deck(options.frontImages, options.backImage);
+    this.deck = new Deck(this.options.frontImages, this.options.backImage);
     this.start();
   }
 
