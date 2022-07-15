@@ -111,7 +111,6 @@ class Game {
     } else {
       setTimeout(() => this.unflipCards(card, previousCard), 100);
       this.previousCard = null;
-      setTimeout(() => (this.flipEnabled = true), 1000);
     }
   }
 }
