@@ -1,5 +1,6 @@
 const { Console } = require("console");
 const Game = require("./game");
+const ui = require("./ui");
 
 let game = new Game({
   frontImages: ["🐱", "🐼", "🐍", "🐝", "🐟", "🐸", "🦇", "🐁"],
@@ -7,10 +8,10 @@ let game = new Game({
 });
 
 game.onStart = () => {
-  require("./ui").drawUI(game);
+  ui.drawUI(game);
 };
 
 game.onScoreUpdate = () => {
-  require("./ui").drawUI(game);
+  ui.drawUI(game);
 };
 game.start();

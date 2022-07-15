@@ -52,6 +52,7 @@ function buildMatrix(game) {
 
 function drawUI(game) {
   buildMatrix(game);
+  console.clear();
   console.log("   1  2  3  4");
   console.log(
     `A ${matrix.A[1].getCurrentImage()} ${matrix.A[2].getCurrentImage()} ${matrix.A[3].getCurrentImage()} ${matrix.A[4].getCurrentImage()}`
