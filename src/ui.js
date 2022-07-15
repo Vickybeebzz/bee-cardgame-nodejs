@@ -1,3 +1,9 @@
+const readline = require("readline");
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
 let matrix = {
   A: {
     1: {},
@@ -59,6 +65,21 @@ function drawUI(game) {
   console.log(
     `D ${matrix.D[1].getCurrentImage()} ${matrix.D[2].getCurrentImage()} ${matrix.D[3].getCurrentImage()} ${matrix.D[4].getCurrentImage()}`
   );
+
+  if (game.score == 8) {
+    console.log("You Win!");
+    game.reset();
+  } else {
+    rl.question("Enter tile (e.g A 2): ", function (tile) {
+      let splitString = tile.split(" ");
+      if (tile === "") {
+        game.updateScore();
+      } else {
+        let id = matrix[splitString[0]][splitString[1]].id;
+        game.flip(id);
+      }
+    });
+  }
 }
 
-module.exports = { drawUI: drawUI(matrix), buildMatrix: buildMatrix(game) };
+module.exports = { drawUI, buildMatrix };
