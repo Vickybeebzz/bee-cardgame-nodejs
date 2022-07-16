@@ -37,7 +37,10 @@ class Game {
 
   flip(cardId) {
     const card = this.deck.cards[cardId];
-    if (this.deck.cards[cardId].flipped == true) return;
+    if (this.deck.cards[cardId].flipped == true) {
+      this.updateScore();
+      return;
+    }
 
     if (this.previousCard == null) {
       this.openFirstCard(cardId);

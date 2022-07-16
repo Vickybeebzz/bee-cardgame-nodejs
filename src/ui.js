@@ -3,6 +3,8 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
+const fs = require("fs");
+const filePath = "./best.txt";
 
 let matrix = {
   A: {
@@ -67,13 +69,28 @@ function drawUI(game) {
     `D ${matrix.D[1].getCurrentImage()} ${matrix.D[2].getCurrentImage()} ${matrix.D[3].getCurrentImage()} ${matrix.D[4].getCurrentImage()}`
   );
 
+  console.log(`Moves Used: ${game.flips}`);
+
+  if (fs.existsSync(filePath)) {
+    const data = fs.readFileSync(filePath);
+    console.log(`Best: ${data}`);
+  } else {
+    console.log(`Best: 0`);
+  }
+
   if (game.score == 8) {
     console.log("You Win!");
+    fs.writeFileSync(filePath, game.flips.toString());
     game.reset();
   } else {
     rl.question("Enter tile (e.g A 2): ", function (tile) {
       let splitString = tile.split(" ");
-      if (tile === "") {
+      if (
+        tile === "" ||
+        splitString[1] === undefined ||
+        matrix[splitString[0]] === undefined ||
+        matrix[splitString[0]][splitString[1]] === undefined
+      ) {
         game.updateScore();
       } else {
         let id = matrix[splitString[0]][splitString[1]].id;
