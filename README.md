@@ -1,5 +1,7 @@
 # Bee Memory Cards Game (Nodejs)
 
+This is a match-two memory game. You match pairs until all the board is revealed, in the minimum amount of flips possible. Once you complete the game, it will save your best score in a file.
+
 ## Execution
 *(You need to run this program with nodejs.)*
  
