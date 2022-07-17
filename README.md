@@ -7,6 +7,8 @@ This is a match-two memory game. You match pairs until all the board is revealed
  
 Run index.js
 
+>node index.js
+
 ## Configuration
 
 ** The accepted image set sizes are 2, 8, 18, 32 and 50. **
