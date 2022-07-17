@@ -7,7 +7,7 @@ This is a match-two memory game. You match pairs until all the board is revealed
  
 Run index.js
 
->node ./src/index.js
+```node ./src/index.js```
 
 ## Configuration
 
