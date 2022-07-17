@@ -1,4 +1,3 @@
-const { Console } = require("console");
 const Game = require("./game");
 const ui = require("./ui");
 
@@ -9,8 +8,6 @@ const options = {
 
 let game = new Game(options);
 let matrix;
-
-console.log(matrix);
 
 game.onStart = () => {
   matrix = new ui.Matrix(options, game);
