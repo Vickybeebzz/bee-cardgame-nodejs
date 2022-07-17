@@ -9,9 +9,13 @@ const filePath = "./best.txt";
 
 const letters = "ABCDEFGHIJ";
 const numbers = "0123456789";
+const data = "";
+
+if (fs.existsSync(filePath)) data = fs.readFileSync(filePath);
 
 function Matrix(options, game) {
   this.options = options;
+
   if (
     this.options.frontImages.length != 2 &&
     this.options.frontImages.length != 8 &&
@@ -50,7 +54,7 @@ function drawUI(matrix, game) {
     numberString += i + "  ";
   }
 
-  console.log(`   ${numberString}`);
+  console.log(`${numberString.padStart(numberString.length + 2, "  ")}`);
 
   for (let i = 0; i < Math.sqrt(game.deck.cards.length); i++) {
     let emojiLine = `${letters[i]} `;
@@ -62,7 +66,6 @@ function drawUI(matrix, game) {
   console.log(`Moves Used: ${game.flips}`);
 
   if (fs.existsSync(filePath)) {
-    const data = fs.readFileSync(filePath);
     console.log(`Best: ${data}`);
   } else {
     console.log(`Best: 0`);
@@ -77,7 +80,7 @@ function drawUI(matrix, game) {
       let splitString = tile.split(" ");
       if (
         tile === "" ||
-        splitString[1] === undefined ||
+        splitString.length === 2 ||
         matrix[splitString[0]] === undefined ||
         matrix[splitString[0]][splitString[1]] === undefined
       ) {
