@@ -4,71 +4,61 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 const fs = require("fs");
+const { exit } = require("process");
 const filePath = "./best.txt";
 
-let matrix = {
-  A: {
-    1: {},
-    2: {},
-    3: {},
-    4: {},
-  },
-  B: {
-    1: {},
-    2: {},
-    3: {},
-    4: {},
-  },
-  C: {
-    1: {},
-    2: {},
-    3: {},
-    4: {},
-  },
-  D: {
-    1: {},
-    2: {},
-    3: {},
-    4: {},
-  },
-};
+const letters = "ABCDEFGHIJ";
+const numbers = "0123456789";
 
-function buildMatrix(game) {
-  matrix.A[1] = game.deck.cards[0];
-  matrix.A[2] = game.deck.cards[1];
-  matrix.A[3] = game.deck.cards[2];
-  matrix.A[4] = game.deck.cards[3];
-  matrix.B[1] = game.deck.cards[4];
-  matrix.B[2] = game.deck.cards[5];
-  matrix.B[3] = game.deck.cards[6];
-  matrix.B[4] = game.deck.cards[7];
-  matrix.C[1] = game.deck.cards[8];
-  matrix.C[2] = game.deck.cards[9];
-  matrix.C[3] = game.deck.cards[10];
-  matrix.C[4] = game.deck.cards[11];
-  matrix.D[1] = game.deck.cards[12];
-  matrix.D[2] = game.deck.cards[13];
-  matrix.D[3] = game.deck.cards[14];
-  matrix.D[4] = game.deck.cards[15];
+function Matrix(options, game) {
+  this.options = options;
+  if (
+    this.options.frontImages.length != 2 &&
+    this.options.frontImages.length != 8 &&
+    this.options.frontImages.length != 18 &&
+    this.options.frontImages.length != 32 &&
+    this.options.frontImages.length != 50
+  ) {
+    console.log(
+      "Please enter 2, 8, 18, 32 or 50 images in the 'frontImages' array."
+    );
+    exit();
+  }
+  this.size = game.deck.cards.length;
+
+  for (let i = 0; i < Math.sqrt(this.size); i++) {
+    this[letters[i]] = [];
+    for (let j = 0; j < Math.sqrt(this.size); j++) {
+      this[letters[i]].push(this[numbers[j]]);
+    }
+  }
+
+  let k = 0;
+  for (let i = 0; i < Math.sqrt(this.size); i++) {
+    for (let j = 0; j < Math.sqrt(this.size); j++) {
+      this[letters[i]][numbers[j]] = game.deck.cards[k];
+      k++;
+    }
+  }
 }
 
-function drawUI(game) {
-  buildMatrix(game);
+function drawUI(matrix, game) {
   console.clear();
-  console.log("   1  2  3  4");
-  console.log(
-    `A ${matrix.A[1].getCurrentImage()} ${matrix.A[2].getCurrentImage()} ${matrix.A[3].getCurrentImage()} ${matrix.A[4].getCurrentImage()}`
-  );
-  console.log(
-    `B ${matrix.B[1].getCurrentImage()} ${matrix.B[2].getCurrentImage()} ${matrix.B[3].getCurrentImage()} ${matrix.B[4].getCurrentImage()}`
-  );
-  console.log(
-    `C ${matrix.C[1].getCurrentImage()} ${matrix.C[2].getCurrentImage()} ${matrix.C[3].getCurrentImage()} ${matrix.C[4].getCurrentImage()}`
-  );
-  console.log(
-    `D ${matrix.D[1].getCurrentImage()} ${matrix.D[2].getCurrentImage()} ${matrix.D[3].getCurrentImage()} ${matrix.D[4].getCurrentImage()}`
-  );
+  let numberString = "";
 
+  for (let i = 0; i < Math.sqrt(game.deck.cards.length); i++) {
+    numberString += i + "  ";
+  }
+
+  console.log(`   ${numberString}`);
+
+  for (let i = 0; i < Math.sqrt(game.deck.cards.length); i++) {
+    let emojiLine = `${letters[i]} `;
+    for (let j = 0; j < Math.sqrt(game.deck.cards.length); j++) {
+      emojiLine += `${matrix[letters[i]][numbers[j]].getCurrentImage()} `;
+    }
+    console.log(emojiLine);
+  }
   console.log(`Moves Used: ${game.flips}`);
 
   if (fs.existsSync(filePath)) {
@@ -100,4 +90,4 @@ function drawUI(game) {
   }
 }
 
-module.exports = { drawUI, buildMatrix };
+module.exports = { drawUI, Matrix };
